@@ -1,0 +1,31 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./:/var/www
+      - ./nginx_dev.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    environment:
+        VIRTUAL_HOST: ${VIRTUAL_HOST}
+    networks:
+      - front
+      - backend
+
+  php:
+    image: breakhack/php7.4
+    volumes:
+      - ./:/var/www
+    networks:
+      - backend
+      - databases
+
+networks:
+  front:
+    external:
+      name: front
+  databases:
+    external:
+      name: databases
+  backend:
